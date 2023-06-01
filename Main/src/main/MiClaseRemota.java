@@ -27,7 +27,7 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
     }
 
      public void SendMS (String mensaje) throws RemoteException {
-         System.out.println(mensaje);
+        // System.out.println(mensaje);
          for (InterfazCliente client: clients ) {
              client.recibirMS(mensaje);
          }
