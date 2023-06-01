@@ -11,4 +11,5 @@ import java.rmi.RemoteException;
  */
 public interface InterfazCliente extends Remote  {
    void recibirMS (String mensaje) throws RemoteException ;
+   
 }

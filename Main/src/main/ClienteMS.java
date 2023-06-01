@@ -13,15 +13,15 @@ import javax.swing.JTextArea;
  * @author angel
  */
 public class ClienteMS extends UnicastRemoteObject implements InterfazCliente {
-   public JTextArea ViewChat;
-   
-   public ClienteMS (JTextArea MSChat) throws RemoteException  {
-    this.ViewChat = MSChat;
-   }
-    
-    public void recibirMS (String mensaje) throws RemoteException {
-        
-       ViewChat.append(mensaje + "\n");
+    public JTextArea ViewChat;
+
+    public ClienteMS(JTextArea MSChat) throws RemoteException {
+        this.ViewChat = MSChat;
+    }
+
+    public void recibirMS(String mensaje) throws RemoteException {
+
+        ViewChat.append(mensaje + "\n");
         //System.out.println(mensaje + "   desde interfaces");
-     }
+    }
 }

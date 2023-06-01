@@ -6,6 +6,7 @@ package main;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.Naming;
 
 /**
  *
@@ -13,30 +14,17 @@ import java.rmi.registry.Registry;
  */
 public class MiClienteChat extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MiClienteChat
-     */
+    public  Registry registry;
+    public  MiInterfazRemota remoteMi ;
     public String auxms;
+    
     public MiClienteChat() {
         initComponents();
         TextAreas();
-        RegisterCliente ();
+        RegisterCliente();
     }
 
-    public void RegisterCliente () {
-       try {
-   // Registry registry = LocateRegistry.getRegistry("192.168.84.200", 1099);
-           Registry registry = LocateRegistry.getRegistry("192.168.100.5", 1099);
-            MiInterfazRemota remoteMi = (MiInterfazRemota) registry.lookup("MiInterfazRemota");
-            
-            ClienteMS cliente = new ClienteMS(ChatGeneralArea);
-            remoteMi.registerClient(cliente);
-          
-        } catch (Exception e) {
-            System.err.println("Error send the message: " + e.toString());
-        }
     
-    }
  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -100,25 +88,42 @@ public class MiClienteChat extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void BtnGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGeneralActionPerformed
-      
-        String MS = ChatGeneral.getText();
-       
+      public void RegisterCliente() {
         try {
-   // Registry registry = LocateRegistry.getRegistry("192.168.84.200", 1099);
-          
-           
-           MiClaseRemota remoteMi = new MiClaseRemota ();
+            
+            // Registry registry = LocateRegistry.getRegistry("192.168.84.200", 1099);
+            //remoteMiaux = (MiInterfazRemota) Naming.lookup("rmi://192.168.100.5:1099/MiInterfazRemota");
+
+            registry = LocateRegistry.getRegistry("192.168.100.5", 1099);
+            remoteMi = (MiInterfazRemota) registry.lookup("MiInterfazRemota");
+
             ClienteMS cliente = new ClienteMS(ChatGeneralArea);
             remoteMi.registerClient(cliente);
+            // System.out.println(remoteMiaux);
+            System.out.println("Conexion exitosa");
             
+        } catch (Exception e) {
+            System.err.println("Error send the message: " + e.toString());
+        }
+
+    }
+    
+    private void BtnGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGeneralActionPerformed
+
+        String MS = ChatGeneral.getText();
+
+        try {
+            // Registry registry = LocateRegistry.getRegistry("192.168.84.200", 1099);
+            /* Registry registry = LocateRegistry.getRegistry("192.168.100.5", 1099);
+            MiInterfazRemota remoteMi = (MiInterfazRemota) registry.lookup("MiInterfazRemota");*/
+
+            //ClienteMS cliente = new ClienteMS(ChatGeneralArea);
+            //remoteMi.registerClient(cliente);
             //System.out.println(cliente);
-           
-           // System.out.println(auxms + "main");
+            // System.out.println(auxms + "main");
             ChatGeneralArea.append(MS + "\n");
-            
-            remoteMi.poolMS(MS);
+
+           // remoteMi.poolMS(MS);
             remoteMi.SendMS(MS);
         } catch (Exception e) {
             System.err.println("Error send the message: " + e.toString());
@@ -157,7 +162,8 @@ public class MiClienteChat extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MiClienteChat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+      
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
