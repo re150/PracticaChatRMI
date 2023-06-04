@@ -4,6 +4,7 @@
  */
 package main;
 
+import Interfaces.InterfazCliente;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import javax.swing.JTextArea;

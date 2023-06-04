@@ -2,30 +2,73 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package main;
+package View;
 
+import Interfaces.MiInterfazRemota;
+import Interfaces.MiInterfazRemotaPrivada;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.Naming;
-
+import java.net.Socket;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import main.ClienteMS;
+import main.MiClaseRemota;
+import main.MiclassRemotaPunto;
 /**
  *
  * @author angel
  */
 public class MiClienteChat extends javax.swing.JFrame {
 
-    public  Registry registry;
-    public  MiInterfazRemota remoteMi ;
-    public String auxms;
-    
+    public  Registry registryG;
+    public  Registry registryPrivate; 
+    public  MiInterfazRemota remoteMi;
+    public MiInterfazRemotaPrivada remoteMiPri;
+      
     public MiClienteChat() {
         initComponents();
         TextAreas();
         RegisterCliente();
+       
     }
 
+    public void ChatPrivadoServer() {
+        try {
+
+           MiclassRemotaPunto  remoteMiPri = new MiclassRemotaPunto();
+            //se registara un puertto 
+            Registry registry = LocateRegistry.createRegistry(1234);
+            registry.rebind("MiInterfazRemotaPrivada", remoteMiPri);
+
+            System.out.println("Servidor RMI listo...");
+        } catch (Exception e) {
+            System.err.println("Error  Registry in  servidor: " + e.toString());
+            e.printStackTrace();
+        }
+        RegisterClientePunto();
+    }
     
- 
+    public void RegisterClientePunto() {
+        try {
+            
+            // Registry registry = LocateRegistry.getRegistry("192.168.84.200", 1099);
+            //remoteMiaux = (MiInterfazRemota) Naming.lookup("rmi://192.168.100.5:1099/MiInterfazRemota");
+
+            registryPrivate = LocateRegistry.getRegistry("192.168.100.5", 1234);
+            remoteMiPri = (MiInterfazRemotaPrivada) registryPrivate.lookup("MiInterfazRemotaPrivada");
+            
+           ClienteMS cliente = new ClienteMS(ChatP1);
+            remoteMiPri.registerClient(cliente);
+            // System.out.println(remoteMiaux);
+            System.out.println("Conexion exitosa");
+            
+        } catch (Exception e) {
+            System.err.println("Error Registry in server: " + e.toString());
+        }
+
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -39,6 +82,8 @@ public class MiClienteChat extends javax.swing.JFrame {
         ChatP1 = new javax.swing.JTextArea();
         ChatP1Send = new javax.swing.JTextField();
         BtnSP1 = new javax.swing.JButton();
+        BtnConexion = new javax.swing.JButton();
+        Registrarce = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,27 +108,45 @@ public class MiClienteChat extends javax.swing.JFrame {
         ChatP1.setRows(5);
         jScrollPane2.setViewportView(ChatP1);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 17, 327, 92));
-        jPanel1.add(ChatP1Send, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 127, 260, -1));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 20, 327, 150));
+        jPanel1.add(ChatP1Send, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 270, -1));
 
         BtnSP1.setText("Send");
-        jPanel1.add(BtnSP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 124, 60, 30));
+        BtnSP1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnSP1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(BtnSP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 180, 60, 30));
+
+        BtnConexion.setText("Conecta");
+        BtnConexion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnConexionActionPerformed(evt);
+            }
+        });
+        jPanel1.add(BtnConexion, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 40, -1, -1));
+
+        Registrarce.setText("Registra");
+        Registrarce.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegistrarceActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Registrarce, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 90, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE)
         );
 
         pack();
@@ -94,8 +157,8 @@ public class MiClienteChat extends javax.swing.JFrame {
             // Registry registry = LocateRegistry.getRegistry("192.168.84.200", 1099);
             //remoteMiaux = (MiInterfazRemota) Naming.lookup("rmi://192.168.100.5:1099/MiInterfazRemota");
 
-            registry = LocateRegistry.getRegistry("192.168.100.5", 1099);
-            remoteMi = (MiInterfazRemota) registry.lookup("MiInterfazRemota");
+            registryG = LocateRegistry.getRegistry("192.168.100.5", 1099);
+            remoteMi = (MiInterfazRemota) registryG.lookup("MiInterfazRemota");
 
             ClienteMS cliente = new ClienteMS(ChatGeneralArea);
             remoteMi.registerClient(cliente);
@@ -121,7 +184,7 @@ public class MiClienteChat extends javax.swing.JFrame {
             //remoteMi.registerClient(cliente);
             //System.out.println(cliente);
             // System.out.println(auxms + "main");
-            ChatGeneralArea.append(MS + "\n");
+           // ChatGeneralArea.append(MS + "\n");
 
            // remoteMi.poolMS(MS);
             remoteMi.SendMS(MS);
@@ -130,6 +193,30 @@ public class MiClienteChat extends javax.swing.JFrame {
         }
         ChatGeneral.setText("");
     }//GEN-LAST:event_BtnGeneralActionPerformed
+
+    private void BtnSP1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSP1ActionPerformed
+        // TODO add your handling code here:
+        String MS = ChatP1Send.getText();
+        try {
+         
+            
+            remoteMiPri.SendMS(MS);
+        } catch (Exception ex) {
+            System.out.println("Error send the Messange Private");
+        }
+
+      
+      ChatP1Send.setText("");
+    }//GEN-LAST:event_BtnSP1ActionPerformed
+
+    private void BtnConexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnConexionActionPerformed
+        ChatPrivadoServer();
+               
+    }//GEN-LAST:event_BtnConexionActionPerformed
+
+    private void RegistrarceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarceActionPerformed
+         RegisterClientePunto();
+    }//GEN-LAST:event_RegistrarceActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,12 +260,14 @@ public class MiClienteChat extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnConexion;
     private javax.swing.JButton BtnGeneral;
     private javax.swing.JButton BtnSP1;
     private javax.swing.JTextField ChatGeneral;
     private javax.swing.JTextArea ChatGeneralArea;
     private javax.swing.JTextArea ChatP1;
     private javax.swing.JTextField ChatP1Send;
+    private javax.swing.JButton Registrarce;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

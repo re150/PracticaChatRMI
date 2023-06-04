@@ -1,6 +1,8 @@
 
 package main;
 
+import Interfaces.MiInterfazRemota;
+import Interfaces.InterfazCliente;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.HashSet;
  */
 public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemota{
     private List<InterfazCliente> clients;
-      private Set<String> mensajesEnviados;
+    private Set<String> mensajesEnviados;
       
     
     public MiClaseRemota() throws RemoteException {
@@ -23,6 +25,7 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
     
      public void registerClient(InterfazCliente client) throws RemoteException{
         clients.add(client);
+       //  System.out.println(client);
     }
      
     public String poolMS(String  aux) throws RemoteException {
@@ -36,7 +39,7 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
         if (!mensajesEnviados.contains(mensaje)) {
             for (InterfazCliente client : clients) {
                 client.recibirMS(mensaje);
-                System.out.println(client);
+               // System.out.println(client);
             }
             mensajesEnviados.add(mensaje);
         }
